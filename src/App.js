@@ -10,8 +10,7 @@ function App() {
     api.get('repositories').then(response => {
       setRepositories(response.data);
     });
-  },[/**repositories */]) 
-  //Embora tenha funcionado no site, nos testes deu memory leak
+  },[], console.log(repositories)) 
 
   async function handleAddRepository() {
     const response = await api.post('repositories', {
@@ -23,18 +22,16 @@ function App() {
 
   async function handleRemoveRepository(id) {
     await api.delete(`repositories/${id}`);
-    // Precisa dessa parte se for usar o repositories no useEffect.
-    // const repoIndex = repositories.findIndex(repo => repo.id === id);
-    // if (repoIndex > 0){
-    //   repositories.splice(repoIndex,1)
-    // }
-    
-    // Embora tenha funcionado no site, não funcionou para os testes
-    api.get('repositories').then(response => {
-      setRepositories(response.data);
-    });
-
+    setRepositories(repositories.filter(r => r.id !== id));
   }
+    
+   
+    // Embora tenha funcionado no site, não funcionou para os testes
+    // api.get('repositories').then(response => {
+    //   setRepositories(response.data);
+    // });
+
+  
 
   return (
     <div>
